@@ -1,0 +1,31 @@
+flask import Flask, render_template, request, redirect, url_for
+
+app = Flask(__name__)
+
+projects = []
+tasks = []
+
+@app.route('/')
+def home():
+    return render_template('index.html', projects=projects, tasks=tasks)
+
+@app.route('/add_project', methods=['POST'])
+def add_project():
+    project_name = request.form['project_name']
+    projects.append(project_name)
+    return redirect(url_for('home'))
+
+@app.route('/add_task', methods=['POST'])
+def add_task():
+    task_name = request.form['task_name']
+    assigned_to = request.form['assigned_to']
+
+    tasks.append({
+        'task': task_name,
+        'assigned_to': assigned_to
+    })
+
+    return redirect(url_for('home'))
+
+if __name__ == '__main__':
+    app.run(debug=True)
